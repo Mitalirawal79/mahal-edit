@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Instagram, Maximize2, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, ChevronLeft, ChevronRight, Instagram, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import heroCinematic from "@/assets/hero-indian-elegance.jpg";
 import hero from "@/assets/hero-editorial.jpg";
@@ -18,8 +18,33 @@ import collectionFestiveEdit from "@/assets/collection-festive-edit.jpg";
 import collectionBridal from "@/assets/collection-bridal.jpg";
 import collectionSignature from "@/assets/collection-signature.jpg";
 import collectionEveningEdit from "@/assets/collection-evening-edit.jpg";
-import { MagneticElement, ProductTile } from "@/components/storefront";
-import { products } from "@/lib/catalog";
+
+import bridalPunjab from "@/assets/bridal-punjab.jpg";
+import bridalRajasthan from "@/assets/bridal-rajasthan.jpg";
+import bridalGujarat from "@/assets/bridal-gujarat.jpg";
+import bridalBengal from "@/assets/bridal-bengal.jpg";
+import bridalTamilnadu from "@/assets/bridal-tamilnadu.jpg";
+import bridalKashmir from "@/assets/bridal-kashmir.jpg";
+import bridalKerala from "@/assets/bridal-kerala.jpg";
+import bridalAssam from "@/assets/bridal-assam.jpg";
+import bridalMaharashtra from "@/assets/bridal-maharashtra.jpg";
+import bridalLucknow from "@/assets/bridal-lucknow.jpg";
+import bridalHeroPortrait from "@/assets/bridal-hero-portrait.jpg";
+import bridalHeroPortrait2 from "@/assets/bridal-hero-portrait-2.jpg";
+import bridalHeroPortrait3 from "@/assets/bridal-hero-portrait-3.jpg";
+
+import indoWesternPalazzo from "@/assets/indo-western-palazzo.png";
+import indoWesternSareeJumpsuit from "@/assets/indo-western-saree-jumpsuit.png";
+
+import attentionFeatured from "@/assets/attention-featured.jpg";
+import attentionCard1 from "@/assets/attention-card-1.jpg";
+import attentionCard2 from "@/assets/attention-card-2.jpg";
+import attentionCard3 from "@/assets/attention-card-3.jpg";
+import attentionCard4 from "@/assets/attention-card-4.jpg";
+import attentionCard5 from "@/assets/attention-card-5.jpg";
+import attentionCard6 from "@/assets/attention-card-6.jpg";
+
+import { MagneticElement } from "@/components/storefront";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -87,12 +112,6 @@ const sixMoods = [
 function SixMoodsSection() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const scrollBy = (offset: number) => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: offset, behavior: "smooth" });
-    }
-  };
-
   return (
     <section className="moods-section" aria-label="Explore Our Moods">
       <div className="moods-header-wrap">
@@ -101,29 +120,6 @@ function SixMoodsSection() {
           <h2 className="moods-main-title">
             Explore Our <em>Moods.</em>
           </h2>
-        </div>
-        <div className="moods-header-right">
-          <p className="moods-lead">
-            From quiet celebrations to resplendent bridal moments, dress for how you wish to feel.
-          </p>
-          <div className="moods-nav-arrows">
-            <button
-              type="button"
-              onClick={() => scrollBy(-320)}
-              className="moods-arrow-btn"
-              aria-label="Scroll moods left"
-            >
-              <ChevronLeft size={18} strokeWidth={1.3} />
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollBy(320)}
-              className="moods-arrow-btn"
-              aria-label="Scroll moods right"
-            >
-              <ChevronRight size={18} strokeWidth={1.3} />
-            </button>
-          </div>
         </div>
       </div>
 
@@ -168,204 +164,834 @@ function SixMoodsSection() {
   );
 }
 
-function BrandStatement() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+const featuredSixBridalLooks = [
+  {
+    state: "Punjab",
+    title: "Punjab Royal Zardozi Velvet Lehenga",
+    region: "North India",
+    craft: "Pure Bullion Zardozi & Kalire",
+    price: "₹1,35,000",
+    image: bridalPunjab,
+    slug: "punjab-zardozi-bridal-lehenga",
+    desc: "Crimson micro-velvet adorned with antique gold zardozi needlework, traditional red chooda, and hanging golden kalire.",
+  },
+  {
+    state: "Rajasthan",
+    title: "Rajasthan Royal Rajputi Poshak Lehenga",
+    region: "West India",
+    craft: "Archival Gota Patti & Borla Setting",
+    price: "₹1,48,000",
+    image: bridalRajasthan,
+    slug: "rajasthan-rajputi-poshak-lehenga",
+    desc: "Rani pink & burnished gold Rajputi Poshak with hand-pressed gota patti, circular borla, and gossamer odhna veil.",
+  },
+  {
+    state: "Gujarat",
+    title: "Gujarat Heritage Panetar Silk Saree",
+    region: "West India",
+    craft: "Panetar Bandhani & Seedha Pallu",
+    price: "₹88,500",
+    image: bridalGujarat,
+    slug: "gujarat-panetar-bandhani-saree",
+    desc: "Ivory mulberry silk body with rich vermilion bandhani front-draped seedha pallu and pure gold zari borders.",
+  },
+  {
+    state: "West Bengal",
+    title: "Bengal Rajbari Benarasi Bridal Saree",
+    region: "East India",
+    craft: "Real Gold Floral Jaal & Sholar Mukut",
+    price: "₹94,000",
+    image: bridalBengal,
+    slug: "bengal-rajbari-benarasi-saree",
+    desc: "Royal red Katan Benarasi silk woven with gold floral jaal, traditional white Sholar Mukut crown, and sacred chandan artistry.",
+  },
+  {
+    state: "Tamil Nadu",
+    title: "Tamil Nadu Kanchipuram Temple Saree",
+    region: "South India",
+    craft: "Korvai Weave & Temple Border Architecture",
+    price: "₹98,000",
+    image: bridalTamilnadu,
+    slug: "tamilnadu-kanchipuram-silk-saree",
+    desc: "Maroon & mustard gold pure Kanchipuram silk with interlocking korvai temple borders and 22k gold oddiyanam waist belt styling.",
+  },
+  {
+    state: "Kashmir",
+    title: "Kashmir Royal Sapphire Tilla Pheran",
+    region: "North India",
+    craft: "24k Pure Gold Tilla & Taranga Headdress",
+    price: "₹1,38,000",
+    image: bridalKashmir,
+    slug: "kashmir-tilla-velvet-pheran",
+    desc: "Midnight sapphire velvet bridal Pheran with pure 24k gold Tilla needlework, Taranga crown, and hanging Dejhoor ear jewels.",
+  },
+];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry && entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.18 }
-    );
+function PanIndianBridalSection() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeState, setActiveState] = useState<string>("All");
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+  const scrollBy = (offset: number) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: offset, behavior: "smooth" });
     }
+  };
 
-    return () => observer.disconnect();
-  }, []);
+  const displayedLooks =
+    activeState === "All"
+      ? featuredSixBridalLooks
+      : featuredSixBridalLooks.filter((look) => look.state === activeState);
 
   return (
-    <section
-      ref={sectionRef}
-      className={`brand-statement-section ${isVisible ? "is-visible" : ""}`}
-      aria-label="Brand Introduction"
-    >
-      <div className="brand-statement-inner">
-        <p className="brand-statement-eyebrow">
-          <span className="brand-statement-ornament">✦</span>
-          <span>THE AAVYA PHILOSOPHY</span>
-          <span className="brand-statement-ornament">✦</span>
-        </p>
-
-        <h2 className="brand-statement-title">
-          Rooted in tradition.<br />
-          <em>Designed for the modern world.</em>
-        </h2>
-
-        <div className="brand-statement-divider">
-          <span className="divider-line" />
-          <span className="divider-symbol">❖</span>
-          <span className="divider-line" />
-        </div>
-
-        <p className="brand-statement-description">
-          Born from a deep reverence for India&rsquo;s sacred textile heritage, Aavya reimagines classic occasionwear through a contemporary architectural lens. Every piece is an homage to master weavers and zardozi artisans—honouring centuries of handcraft while sculpting effortless, fluid silhouettes tailored for modern celebrations across the world.
-        </p>
-
-        <div className="brand-statement-footer">
-          <span className="brand-statement-origin">HAUTE COUTURE · NEW DELHI</span>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function WovenStorySection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isInView, setIsInView] = useState(false);
-  const [parallaxY, setParallaxY] = useState(0);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry && entry.isIntersecting) {
-          setIsInView(true);
-        }
-      },
-      { threshold: 0.12 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (sectionRef.current) {
-            const rect = sectionRef.current.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-            if (rect.top < windowHeight && rect.bottom > 0) {
-              const progress = (windowHeight - rect.top) / (windowHeight + rect.height);
-              // Subtle parallax shift between -28px and +28px
-              const offset = (progress - 0.5) * 56;
-              setParallaxY(offset);
-            }
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <section
-      ref={sectionRef}
-      className={`editorial-story-section ${isInView ? "is-in-view" : ""}`}
-      aria-label="Storytelling: Woven to Be Remembered"
-    >
-      <div className="editorial-story-container">
-        {/* Large fashion & craft image with reveal and parallax */}
-        <div className="editorial-story-media-col">
-          <div className="editorial-story-frame">
-            <div
-              className="editorial-story-parallax-img"
-              style={{
-                transform: `translate3d(0, ${parallaxY}px, 0) scale(1.08)`,
-              }}
-            >
-              <img
-                src={wovenCraftImg}
-                alt="Artisan hand-embroidering regal burgundy velvet with pure gold zardozi on a heritage wooden loom"
-                loading="lazy"
-                width={1024}
-                height={1365}
-                className="editorial-story-img"
-              />
-            </div>
-            <div className="editorial-story-badge">
-              <span className="badge-tag">FIG. 03 / ATELIER ARCHIVE</span>
-              <span className="badge-desc">HANDCRAFTED IN NEW DELHI</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Editorial Text Column */}
-        <div className="editorial-story-text-col">
-          <div className="editorial-story-header">
-            <div className="editorial-story-eyebrow">
-              <span className="story-eyebrow-diamond">✦</span>
-              <span className="story-eyebrow-label">THE STORY</span>
-              <span className="story-eyebrow-line" />
-            </div>
-
-            <h2 className="editorial-story-title">
-              Woven to Be<br />
-              <em>Remembered.</em>
+    <section className="bridal-heritage-section" aria-label="Featured Indian States Bridal Fashion">
+      <div className="bridal-heritage-container">
+        {/* Editorial Section Heading */}
+        <div className="bridal-heritage-header-wrap">
+          <div>
+            <p className="eyebrow">02 / PAN-INDIAN BRIDAL HERITAGE</p>
+            <h2 className="bridal-heritage-title">
+              Wedding Looks.
             </h2>
           </div>
 
-          <div className="editorial-story-body">
-            <p className="story-lead">
-              Across India’s ancient textile sanctuaries—from the sacred looms of Varanasi to the sun-drenched courtyards of Chanderi—weaving is an act of storytelling. Every warp and weft preserves memories, songs, and ancestral pride.
-            </p>
-
-            <p className="story-paragraph">
-              At Aavya, each silhouette begins in conversation with master artisans. Pure silk threads meet hand-beaten gold zari, while intricate zardozi needlework is painstakingly guided by hand over weeks of devotion. We refuse the haste of modern production, honouring the cadence of timeless craftsmanship where perfection is measured stitch by deliberate stitch.
-            </p>
-
-            <p className="story-paragraph">
-              Yet tradition is never static. We translate this profound heritage into fluid, sculptural silhouettes with modern ease—garments designed not for display, but to become treasured heirlooms in the life stories of those who wear them.
-            </p>
+          <div className="bridal-nav-controls">
+            <button
+              type="button"
+              onClick={() => scrollBy(-380)}
+              className="bridal-arrow-btn"
+              aria-label="Scroll bridal looks left"
+            >
+              <ChevronLeft size={20} strokeWidth={1.3} />
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollBy(380)}
+              className="bridal-arrow-btn"
+              aria-label="Scroll bridal looks right"
+            >
+              <ChevronRight size={20} strokeWidth={1.3} />
+            </button>
           </div>
+        </div>
 
-          {/* Pillars of Craft */}
-          <div className="editorial-story-pillars">
-            <div className="story-pillar-item">
-              <span className="pillar-num">01</span>
-              <span className="pillar-title">Heritage Looms</span>
-              <span className="pillar-desc">Authentic Banarasi & Chanderi silks woven by generational masters.</span>
-            </div>
-            <div className="story-pillar-item">
-              <span className="pillar-num">02</span>
-              <span className="pillar-title">Zardozi Devotion</span>
-              <span className="pillar-desc">Hundred-hour hand embroidery using genuine metallic wires and beads.</span>
-            </div>
-            <div className="story-pillar-item">
-              <span className="pillar-num">03</span>
-              <span className="pillar-title">Modern Silhouettes</span>
-              <span className="pillar-desc">Architectural drapes and weightless ease tailored for the contemporary world.</span>
-            </div>
-          </div>
+        {/* State Filter Pills */}
+        <div className="bridal-state-pills" role="tablist" aria-label="Select Indian State">
+          <button
+            type="button"
+            className={`bridal-state-pill-btn ${activeState === "All" ? "active" : ""}`}
+            onClick={() => setActiveState("All")}
+          >
+            All
+          </button>
+          {featuredSixBridalLooks.map((look) => (
+            <button
+              key={look.state}
+              type="button"
+              className={`bridal-state-pill-btn ${activeState === look.state ? "active" : ""}`}
+              onClick={() => setActiveState(look.state)}
+            >
+              {look.state}
+            </button>
+          ))}
+        </div>
 
-          <div className="editorial-story-actions">
-            <Link to="/story" className="editorial-story-btn">
-              <span>Read Our Full Story</span>
-              <ArrowRight size={16} strokeWidth={1.3} className="story-btn-icon" />
-            </Link>
+        {/* Horizontal Reel Viewport */}
+        <div className="bridal-heritage-reel-viewport" ref={scrollRef}>
+          <div className="bridal-heritage-track">
+            {displayedLooks.map((look) => (
+              <Link
+                key={look.state}
+                to="/product/$slug"
+                params={{ slug: look.slug }}
+                className="bridal-card"
+              >
+                <div className="bridal-card-media">
+                  <img
+                    src={look.image}
+                    alt={`${look.state} traditional bridal fashion: ${look.title}`}
+                    loading="lazy"
+                    width={800}
+                    height={1067}
+                    className="bridal-card-img"
+                  />
+                  <div className="bridal-card-overlay" />
+                  <span className="bridal-state-badge">
+                    {look.state} · {look.region}
+                  </span>
+                  <div className="bridal-craft-chip">
+                    <Sparkles size={13} className="text-amber-300" />
+                    <span>{look.craft}</span>
+                  </div>
+                </div>
+
+                <div className="bridal-card-content">
+                  <span className="bridal-card-kicker">BRIDAL HERITAGE / {look.state.toUpperCase()}</span>
+                  <h3 className="bridal-card-name">{look.title}</h3>
+                  <p className="bridal-card-desc">{look.desc}</p>
+
+                  <div className="bridal-card-footer">
+                    <span className="bridal-card-price">{look.price}</span>
+                    <span className="bridal-card-link-btn">
+                      Explore Look <ArrowRight size={14} strokeWidth={1.4} />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+
+const curvedBridalGalleryItems = [
+  {
+    slug: "tamilnadu-kanchipuram-silk-saree",
+    title: "Ruhani Temple Silk",
+    subtitle: "KANCHIPURAM / TEMPLE WEAVE",
+    state: "Tamil Nadu",
+    price: "₹98,000",
+    image: bridalTamilnadu,
+  },
+  {
+    slug: "bengal-rajbari-benarasi-saree",
+    title: "Saanjh Maroon Banarasi",
+    subtitle: "BENGAL / KATAN SILK",
+    state: "West Bengal",
+    price: "₹94,000",
+    image: bridalBengal,
+  },
+  {
+    slug: "gujarat-panetar-bandhani-saree",
+    title: "Prerna Panetar Silk",
+    subtitle: "GUJARAT / TIE-DYE BANDHANI",
+    state: "Gujarat",
+    price: "₹88,500",
+    image: bridalGujarat,
+  },
+  {
+    slug: "kerala-kasavu-gold-zari-saree",
+    title: "Kavya Courtyard Silk",
+    subtitle: "KERALA / GOLD KASAVU",
+    state: "Kerala",
+    price: "₹64,500",
+    image: bridalKerala,
+  },
+  {
+    slug: "maharashtra-paithani-nauvari-saree",
+    title: "Tara Peacock Paithani",
+    subtitle: "MAHARASHTRA / NAUVARI SILK",
+    state: "Maharashtra",
+    price: "₹86,000",
+    image: bridalMaharashtra,
+  },
+  {
+    slug: "rajasthan-rajputi-poshak-lehenga",
+    title: "Aavanya Royal Rajputi",
+    subtitle: "RAJASTHAN / GOTA PATTI",
+    state: "Rajasthan",
+    price: "₹1,48,000",
+    image: bridalRajasthan,
+  },
+  {
+    slug: "punjab-zardozi-bridal-lehenga",
+    title: "Noor Velvet Zardozi",
+    subtitle: "PUNJAB / BULLION NEEDLEWORK",
+    state: "Punjab",
+    price: "₹1,35,000",
+    image: bridalPunjab,
+  },
+  {
+    slug: "kashmir-tilla-velvet-pheran",
+    title: "Meher Sapphire Tilla",
+    subtitle: "KASHMIR / ROYAL PHERAN",
+    state: "Kashmir",
+    price: "₹1,38,000",
+    image: bridalKashmir,
+  },
+  {
+    slug: "assam-golden-muga-silk-mekhela",
+    title: "Inaya Wild Muga Silk",
+    subtitle: "ASSAM / MEKHELA CHADOR",
+    state: "Assam",
+    price: "₹79,000",
+    image: bridalAssam,
+  },
+  {
+    slug: "lucknow-chikankari-mukaish-lehenga",
+    title: "Zoya Awadh Chikankari",
+    subtitle: "LUCKNOW / MUKAISH EMBROIDERY",
+    state: "Uttar Pradesh",
+    price: "₹1,65,000",
+    image: bridalLucknow,
+  },
+];
+
+function CurvedBridalGallerySection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const isHoveredRef = useRef(false);
+  const hoveredIndexRef = useRef<number | null>(null);
+  const offsetRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartOffsetRef = useRef(0);
+  const currentScalesRef = useRef<number[]>(new Array(40).fill(1));
+
+  // Duplicated array of items for seamless infinite wrap
+  const galleryItems = [
+    ...curvedBridalGalleryItems,
+    ...curvedBridalGalleryItems,
+  ];
+
+  useEffect(() => {
+    let animId: number;
+    const speed = 1.45; // Faster, fluid continuous right-to-left glide
+    const totalCount = galleryItems.length;
+
+    const tick = () => {
+      const container = containerRef.current;
+      if (container) {
+        const viewportWidth = container.offsetWidth || window.innerWidth;
+        const centerX = viewportWidth / 2;
+
+        // Responsive card dimensions
+        const isMobile = viewportWidth < 640;
+        const isTablet = viewportWidth >= 640 && viewportWidth < 1024;
+        const cardWidth = isMobile ? 185 : isTablet ? 215 : 245;
+        const cardGap = isMobile ? 12 : 16;
+        const step = cardWidth + cardGap;
+        const halfTotalWidth = (totalCount / 2) * step;
+
+        if (!isHoveredRef.current && !isDraggingRef.current) {
+          offsetRef.current += speed;
+          if (offsetRef.current >= halfTotalWidth) {
+            offsetRef.current -= halfTotalWidth;
+          }
+        }
+
+        for (let i = 0; i < totalCount; i++) {
+          const el = cardRefs.current[i];
+          if (!el) continue;
+
+          let cardX = i * step - offsetRef.current;
+          while (cardX < -step * 2) {
+            cardX += halfTotalWidth * 2;
+          }
+          while (cardX > viewportWidth + step * 2) {
+            cardX -= halfTotalWidth * 2;
+          }
+
+          // Distance from center of viewport
+          const cardCenterX = cardX + cardWidth / 2;
+          const distFromCenter = cardCenterX - centerX;
+          const norm = distFromCenter / (viewportWidth * 0.50);
+
+          // Pronounced 3D Cylindrical Arc Formula:
+          // Center card is highest and closest (norm = 0, curveY = 0)
+          // Side cards drop smoothly downwards (curveY up to 36px) and rotate inward (up to 30deg)
+          const absNorm = Math.min(Math.abs(norm), 1.85);
+          const curveY = Math.pow(absNorm, 1.85) * (isMobile ? 22 : 36);
+          const rotY = Math.max(-30, Math.min(30, norm * -24));
+          const transZ = -Math.pow(absNorm, 1.45) * (isMobile ? 50 : 90);
+
+          const isThisHovered = hoveredIndexRef.current === i;
+          const targetScale = isThisHovered ? 1.16 : 1.0;
+          currentScalesRef.current[i] = (currentScalesRef.current[i] || 1) + (targetScale - (currentScalesRef.current[i] || 1)) * 0.22;
+          const scale = currentScalesRef.current[i] || 1;
+
+          // Dynamic elevation and depth projection during zoom
+          const hoverElevate = (scale - 1) * -85;
+          const hoverZ = (scale - 1) * 320;
+          // Zoomed card straightens its angle to face the viewer proudly
+          const straightRotY = rotY * Math.max(0, 1 - (scale - 1) * 3);
+
+          el.style.width = `${cardWidth}px`;
+          el.style.left = `${cardX}px`;
+          el.style.transform = `perspective(1050px) translateY(${curveY + hoverElevate}px) translateZ(${transZ + hoverZ}px) rotateY(${straightRotY}deg) scale(${scale})`;
+          el.style.zIndex = isThisHovered
+            ? "50"
+            : String(Math.round(20 - Math.min(absNorm, 2) * 8));
+
+          if (isThisHovered) {
+            el.classList.add("is-active-card");
+          } else {
+            el.classList.remove("is-active-card");
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(tick);
+    };
+
+    animId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animId);
+  }, [galleryItems.length]);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    dragStartXRef.current = e.clientX;
+    dragStartOffsetRef.current = offsetRef.current;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    const delta = e.clientX - dragStartXRef.current;
+    offsetRef.current = dragStartOffsetRef.current - delta * 1.2;
+  };
+
+  const handlePointerUp = () => {
+    isDraggingRef.current = false;
+  };
+
+  return (
+    <section className="curved-arch-section" aria-label="Curved Signature Bridal Gallery">
+      <div className="curved-arch-container">
+        {/* Header matching user reference image */}
+        <div className="curved-arch-header">
+          <div className="curved-arch-header-left">
+            <span className="curved-arch-kicker">THE SUITE / SIGNATURE</span>
+            <h2 className="curved-arch-heading">
+              Woven to Be <span className="curved-script-gold">Remembered</span>
+            </h2>
+          </div>
+
+          <div className="curved-arch-header-right">
+            <Link
+              to="/shop"
+              search={{ category: "Bridal Heritage" }}
+              className="curved-arch-suite-link"
+            >
+              <span>EXPLORE THE SUITE</span>
+              <span className="curved-arch-diamond">✦</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Curved Viewport */}
+        <div
+          ref={containerRef}
+          className="curved-arch-viewport"
+          onMouseEnter={() => {
+            isHoveredRef.current = true;
+          }}
+          onMouseLeave={() => {
+            isHoveredRef.current = false;
+            hoveredIndexRef.current = null;
+          }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        >
+          {/* Subtle lateral edge scrims for cinematic fading */}
+          <div className="curved-arch-edge-fade curved-arch-fade-left" aria-hidden="true" />
+          <div className="curved-arch-edge-fade curved-arch-fade-right" aria-hidden="true" />
+
+          <div className="curved-arch-stage">
+            {galleryItems.map((item, index) => (
+              <Link
+                key={`${item.slug}-${index}`}
+                ref={(el) => {
+                  cardRefs.current[index] = el;
+                }}
+                to="/product/$slug"
+                params={{ slug: item.slug }}
+                className="curved-arch-card"
+                onMouseEnter={() => {
+                  isHoveredRef.current = true;
+                  hoveredIndexRef.current = index;
+                }}
+                onMouseLeave={() => {
+                  if (hoveredIndexRef.current === index) {
+                    hoveredIndexRef.current = null;
+                  }
+                  isHoveredRef.current = false;
+                }}
+                onTouchStart={() => {
+                  isHoveredRef.current = true;
+                  hoveredIndexRef.current = index;
+                }}
+                onTouchEnd={() => {
+                  setTimeout(() => {
+                    if (hoveredIndexRef.current === index) {
+                      hoveredIndexRef.current = null;
+                    }
+                    isHoveredRef.current = false;
+                  }, 1800);
+                }}
+                onPointerDown={() => {
+                  isHoveredRef.current = true;
+                  hoveredIndexRef.current = index;
+                }}
+                aria-label={`${item.title} — ${item.price}`}
+              >
+                <div className="curved-arch-card-media">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading="lazy"
+                    width={896}
+                    height={1200}
+                    className="curved-arch-card-img"
+                  />
+                  <div className="curved-arch-card-scrim" />
+                </div>
+
+                <div className="curved-arch-card-meta">
+                  <span className="curved-arch-card-sub">{item.subtitle}</span>
+                  <h3 className="curved-arch-card-title">{item.title}</h3>
+                  <span className="curved-arch-card-price">{item.price}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const bridalHeroSlides = [
+  {
+    image: bridalHeroPortrait,
+    tag: "THE SACRED RED EDIT",
+    title: "Imperial Handcrafted Bridal Lehenga",
+  },
+  {
+    image: bridalHeroPortrait2,
+    tag: "ROYAL PALACE COUTURE",
+    title: "Noor Zardozi Crimson Ensemble",
+  },
+  {
+    image: bridalHeroPortrait3,
+    tag: "HERITAGE BENARASI SILKS",
+    title: "Rajbari Scarlet Katan Bridal Drape",
+  },
+  {
+    image: collectionBridal,
+    tag: "ARCHIVAL CRIMSON VELVET",
+    title: "Darbar Heirloom Needlecraft",
+  },
+  {
+    image: moodBridal,
+    tag: "TEMPLE GOLD & VERMILION",
+    title: "Shringar Traditional Bridal Saree",
+  },
+];
+
+const luxuryBridalCards = [
+  {
+    slug: "punjab-zardozi-bridal-lehenga",
+    title: "Gulnoor Crimson Velvet Lehenga",
+    tag: "HAUTE ZARDOZI · PUNJAB",
+    price: "₹1,85,000",
+    image: bridalPunjab,
+  },
+  {
+    slug: "bengal-rajbari-benarasi-saree",
+    title: "Saanjh Rajbari Benarasi Saree",
+    tag: "KATAN SILK JAAL · BENGAL",
+    price: "₹1,45,000",
+    image: bridalBengal,
+  },
+  {
+    slug: "rajasthan-rajputi-poshak-lehenga",
+    title: "Padmavati Royal Rajputi Poshak",
+    tag: "ARCHIVAL GOTA PATTI · RAJASTHAN",
+    price: "₹2,10,000",
+    image: bridalRajasthan,
+  },
+  {
+    slug: "lucknow-chikankari-mukaish-lehenga",
+    title: "Zoya Awadh Chikankari Lehenga",
+    tag: "MUKAISH & PEARL · LUCKNOW",
+    price: "₹1,95,000",
+    image: bridalLucknow,
+  },
+  {
+    slug: "kashmir-tilla-velvet-pheran",
+    title: "Meher Sapphire Tilla Pheran",
+    tag: "24K GOLD TILLA · KASHMIR",
+    price: "₹1,65,000",
+    image: bridalKashmir,
+  },
+];
+
+function TheBridalCollectionSection() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isSlideHovered, setIsSlideHovered] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isHoveredRef = useRef(false);
+  const isDraggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartOffsetRef = useRef(0);
+  const offsetRef = useRef(0);
+
+  // 3-second auto-changing slideshow for left portrait
+  useEffect(() => {
+    if (isSlideHovered) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % bridalHeroSlides.length);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [isSlideHovered]);
+
+  // Triple set of 5 cards for infinite smooth loop
+  const loopedCards = [
+    ...luxuryBridalCards,
+    ...luxuryBridalCards,
+    ...luxuryBridalCards,
+  ];
+
+  useEffect(() => {
+    let animId: number;
+    const speed = 0.85; // smooth right-to-left glide
+
+    const tick = () => {
+      const track = trackRef.current;
+      if (track) {
+        const firstCard = track.children[0] as HTMLElement | undefined;
+        const sixthCard = track.children[5] as HTMLElement | undefined;
+        const setWidth =
+          firstCard && sixthCard
+            ? sixthCard.offsetLeft - firstCard.offsetLeft
+            : 5 * 270;
+
+        if (!isHoveredRef.current && !isDraggingRef.current) {
+          offsetRef.current += speed;
+          if (offsetRef.current >= setWidth) {
+            offsetRef.current -= setWidth;
+          }
+        }
+
+        track.style.transform = `translate3d(-${offsetRef.current}px, 0, 0)`;
+      }
+
+      animId = requestAnimationFrame(tick);
+    };
+
+    animId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    dragStartXRef.current = e.clientX;
+    dragStartOffsetRef.current = offsetRef.current;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    const delta = e.clientX - dragStartXRef.current;
+    offsetRef.current = Math.max(0, dragStartOffsetRef.current - delta);
+  };
+
+  const handlePointerUp = () => {
+    isDraggingRef.current = false;
+  };
+
+  const nudgeLeft = () => {
+    offsetRef.current = Math.max(0, offsetRef.current - 260);
+  };
+
+  const nudgeRight = () => {
+    offsetRef.current += 260;
+  };
+
+  return (
+    <section className="luxury-bridal-section" aria-label="The Bridal Collection">
+      {/* Top curved wavy edge */}
+      <div className="luxury-bridal-wave-top" aria-hidden="true">
+        <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none">
+          <path
+            d="M0,0 C320,65 580,12 860,55 C1140,95 1320,25 1440,50 L1440,0 L0,0 Z"
+            fill="var(--background, #faf7f2)"
+          />
+        </svg>
+      </div>
+
+      {/* Layered ambient wavy background decorative lines */}
+      <div className="luxury-bridal-wave-ambient" aria-hidden="true">
+        <svg
+          className="luxury-bridal-ambient-svg"
+          viewBox="0 0 1440 700"
+          fill="none"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M-40,160 C280,260 520,70 820,180 C1120,290 1320,120 1500,200"
+            stroke="rgba(212, 175, 55, 0.16)"
+            strokeWidth="1.8"
+          />
+          <path
+            d="M-20,320 C320,440 600,220 900,350 C1200,480 1380,290 1520,370"
+            stroke="rgba(168, 24, 58, 0.28)"
+            strokeWidth="2.2"
+          />
+          <path
+            d="M-50,490 C260,590 560,390 860,520 C1160,650 1360,460 1530,540"
+            stroke="rgba(212, 175, 55, 0.12)"
+            strokeWidth="1.5"
+          />
+        </svg>
+      </div>
+
+      <div className="luxury-bridal-container">
+        <div className="luxury-bridal-grid">
+          {/* Left Column: Large Portrait with 3s Auto-Changing Slideshow */}
+          <div className="luxury-bridal-left">
+            <div
+              className="luxury-bridal-portrait-wrapper"
+              onMouseEnter={() => setIsSlideHovered(true)}
+              onMouseLeave={() => setIsSlideHovered(false)}
+            >
+              {bridalHeroSlides.map((slide, index) => (
+                <div
+                  key={index}
+                  className={`luxury-bridal-slide ${index === currentSlide ? "is-active" : ""}`}
+                  aria-hidden={index !== currentSlide}
+                >
+                  <img
+                    src={slide.image}
+                    alt={slide.title}
+                    className="luxury-bridal-portrait-img"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    width={800}
+                    height={1100}
+                  />
+                </div>
+              ))}
+
+              <div className="luxury-bridal-portrait-scrim" />
+
+              <div className="luxury-bridal-portrait-badge">
+                <span className="luxury-bridal-badge-diamond">✦</span>
+                <span>THE COUTURE BRIDE</span>
+              </div>
+
+              <div className="luxury-bridal-portrait-caption">
+                <span className="luxury-bridal-portrait-tag">
+                  {bridalHeroSlides[currentSlide]?.tag}
+                </span>
+                <h3 className="luxury-bridal-portrait-title">
+                  {bridalHeroSlides[currentSlide]?.title}
+                </h3>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Heading & 5 Vertical Rectangular Bridal Outfit Cards */}
+          <div className="luxury-bridal-right">
+            <div className="luxury-bridal-header">
+              <div className="luxury-bridal-header-left">
+                <div className="luxury-bridal-kicker">
+                  <span>✦</span>
+                  <span>HAUTE COUTURE HEIRLOOMS</span>
+                  <span>✦</span>
+                </div>
+                <h2 className="luxury-bridal-heading">The Bridal Collection</h2>
+                <p className="luxury-bridal-desc">
+                  Sculpted in sacred scarlet silks, antique bullion zardozi, and archival needlework for the modern heirloom bride.
+                </p>
+              </div>
+
+              <div className="luxury-bridal-header-right">
+                <button
+                  type="button"
+                  onClick={nudgeLeft}
+                  className="luxury-bridal-nav-btn"
+                  aria-label="Previous bridal outfits"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  type="button"
+                  onClick={nudgeRight}
+                  className="luxury-bridal-nav-btn"
+                  aria-label="Next bridal outfits"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+            </div>
+
+            {/* Horizontal cards viewport with smooth right-to-left glide */}
+            <div
+              className="luxury-bridal-viewport"
+              onMouseEnter={() => {
+                isHoveredRef.current = true;
+              }}
+              onMouseLeave={() => {
+                isHoveredRef.current = false;
+              }}
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+            >
+              <div className="luxury-bridal-edge-fade luxury-bridal-fade-left" aria-hidden="true" />
+              <div className="luxury-bridal-edge-fade luxury-bridal-fade-right" aria-hidden="true" />
+
+              <div ref={trackRef} className="luxury-bridal-track">
+                {loopedCards.map((card, idx) => (
+                  <Link
+                    key={`${card.slug}-${idx}`}
+                    to="/product/$slug"
+                    params={{ slug: card.slug }}
+                    className="luxury-bridal-card"
+                    aria-label={`${card.title} — ${card.price}`}
+                  >
+                    <div className="luxury-bridal-card-media">
+                      <img
+                        src={card.image}
+                        alt={card.title}
+                        className="luxury-bridal-card-img"
+                        loading="lazy"
+                        width={600}
+                        height={780}
+                      />
+                      <div className="luxury-bridal-card-scrim" />
+                    </div>
+
+                    <div className="luxury-bridal-card-body">
+                      <div className="luxury-bridal-card-meta">
+                        <span className="luxury-bridal-card-tag">{card.tag}</span>
+                        <h4 className="luxury-bridal-card-name">{card.title}</h4>
+                        <span className="luxury-bridal-card-price">{card.price}</span>
+                      </div>
+
+                      {/* Small Gold Button at bottom */}
+                      <span className="luxury-bridal-gold-btn">
+                        <span>View Piece</span>
+                        <span className="luxury-bridal-gold-btn-icon">✦</span>
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom curved wavy edge */}
+      <div className="luxury-bridal-wave-bottom" aria-hidden="true">
+        <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none">
+          <path
+            d="M0,35 C260,75 520,10 780,60 C1040,110 1260,20 1440,45 L1440,80 L0,80 Z"
+            fill="var(--background, #faf7f2)"
+          />
+        </svg>
+      </div>
+    </section>
+  );
+}
+
+
 
 const showcaseCollections = [
   {
@@ -541,6 +1167,173 @@ function CollectionShowcaseSection() {
   );
 }
 
+const worthCards = [
+  {
+    id: "01",
+    num: "01",
+    label: "01 · THE SISTERHOOD",
+    title: "The Modern Sisterhood",
+    detail: "Ivory & Sage Silk Ensemble",
+    price: "From ₹42,000",
+    image: attentionFeatured,
+    position: "center 48%",
+    slug: "the-modern-sisterhood-trio",
+  },
+  {
+    id: "02",
+    num: "02",
+    label: "02 · GULABI RESHAM",
+    title: "Gulabi Resham Suit",
+    detail: "Blush Georgette & Palazzo",
+    price: "₹38,500",
+    image: attentionCard1,
+    position: "center 50%",
+    slug: "gulabi-resham-georgette-suit",
+  },
+  {
+    id: "03",
+    num: "03",
+    label: "03 · ZAMARRUD SHARARA",
+    title: "Zamarrud Sharara Set",
+    detail: "Emerald Tilla Silk & Jacket",
+    price: "₹46,000",
+    image: attentionCard2,
+    position: "center 52%",
+    slug: "zamarrud-emerald-sharara-suit",
+  },
+  {
+    id: "04",
+    num: "04",
+    label: "04 · ZAFRAN ATELIER",
+    title: "Zafran Contemporary Trio",
+    detail: "Honey-Gold Raw Silk",
+    price: "₹52,000",
+    image: attentionCard3,
+    position: "center 38%",
+    slug: "zafran-gold-silk-trouser-set",
+  },
+  {
+    id: "05",
+    num: "05",
+    label: "05 · SURMAI SAPPHIRE",
+    title: "Surmai Sapphire Draped Suit",
+    detail: "Midnight Navy Cape Sharara",
+    price: "₹44,500",
+    image: attentionCard4,
+    position: "center 60%",
+    slug: "surmai-sapphire-cape-suit",
+  },
+  {
+    id: "06",
+    num: "06",
+    label: "06 · JAMUNI COWL",
+    title: "Jamuni Kalidar & Cowl Kurti",
+    detail: "Plum Resham & Sheer Cape",
+    price: "₹49,000",
+    image: attentionCard5,
+    position: "center 52%",
+    slug: "jamuni-cowl-kalidar-anarkali",
+  },
+];
+
+function WorthYourAttentionSection() {
+  const [activeId, setActiveId] = useState<string>("01");
+
+  return (
+    <section className="worth-attention-section" aria-label="Worth Your Attention Editorial Fashion">
+      <div className="worth-attention-inner">
+        {/* Editorial Section Header */}
+        <div className="worth-attention-header">
+          <div>
+            <div className="worth-attention-eyebrow">
+              <span className="worth-attention-diamond">✦</span>
+              <span>CONTEMPORARY OCCASIONWEAR</span>
+              <span className="mx-2">·</span>
+              <span>THE EDITORIAL SERIES</span>
+            </div>
+            <h2 className="worth-attention-title">
+              Worth Your <em>Attention.</em>
+            </h2>
+          </div>
+
+          <div className="hidden md:flex flex-col items-end gap-2 text-right">
+            <p className="worth-attention-subtitle">
+              Sculpted shararas, tiered anarkalis, and modern occasion silhouettes created for unforgettable gatherings.
+            </p>
+            <div className="worth-attention-hint">
+              <span>HOVER TO EXPLORE SILHOUETTES</span>
+              <span className="worth-attention-diamond">✦</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Single Unified Horizontal Row of Expanding Cards (Hover-Driven) */}
+        <div className="worth-accordion-row" role="tablist" aria-label="Fashion Collection Showcase">
+          {worthCards.map((card) => {
+            const isExpanded = card.id === activeId;
+            return (
+              <div
+                key={card.id}
+                role="button"
+                tabIndex={0}
+                aria-selected={isExpanded}
+                onMouseEnter={() => setActiveId(card.id)}
+                onClick={() => setActiveId(card.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveId(card.id);
+                  }
+                }}
+                style={{
+                  flexGrow: isExpanded ? 5 : 1,
+                  flexShrink: 1,
+                  flexBasis: "0%",
+                }}
+                className={`worth-accordion-card ${isExpanded ? "is-expanded" : "is-collapsed"}`}
+                title={card.title}
+              >
+                <div className="worth-accordion-img-wrap">
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    loading="lazy"
+                    width={800}
+                    height={1000}
+                    style={{ objectPosition: card.position }}
+                    className="worth-accordion-img"
+                  />
+                  <div className="worth-accordion-vignette" />
+
+                  {/* Vertical label & number on collapsed cards */}
+                  <span className="worth-vertical-label-wrap">{card.label}</span>
+                  <span className="worth-accordion-num">{card.num}</span>
+
+                  {/* Minimal 2-Line Bottom Overlay - Images Full and Unobscured */}
+                  <Link
+                    to="/shop"
+                    search={{ category: "Kurta Sets" }}
+                    className="worth-expanded-content"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <h3 className="worth-card-clean-title">{card.title}</h3>
+                    <p className="worth-card-clean-sub">
+                      <span>{card.detail}</span>
+                      <span>·</span>
+                      <span className="worth-sub-accent">{card.price}</span>
+                      <ArrowRight size={13} className="worth-card-clean-arrow" />
+                    </p>
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const forHerCategories = [
   {
     id: "sarees",
@@ -665,523 +1458,6 @@ function ForHerSection() {
   );
 }
 
-const craftDisciplines = [
-  {
-    id: "hand-embroidery",
-    discipline: "01 / PURE ZARDOZI & MARODI",
-    title: "Hand Embroidery",
-    headline: "The Language of the Needle",
-    description: "Guided entirely by hand with fine wooden adda frames, master karigars spend over 160 hours placing metallic bullion wires, dabka, and micro-sequins onto royal velvet foundations.",
-    specs: ["160+ Craft Hours", "Pure Metallic Bullion", "Velvet Foundation"],
-    label: "Artisan Crafted",
-    image: moodBridal,
-    imgCropClass: "crop-embroidery",
-  },
-  {
-    id: "textile-weaving",
-    discipline: "02 / THE HERITAGE PIT LOOM",
-    title: "Textile Weaving",
-    headline: "The Rhythm of Varanasi Looms",
-    description: "Generational master weavers synchronize pedal, reed, and wooden shuttle—interleaving mulberry silk warp with genuine beaten gold zari to yield luminous, heirloom brocades.",
-    specs: ["Varanasi Looms", "3 Weeks per Saree", "Mulberry Silk Warp"],
-    label: "Handwoven",
-    image: wovenCraftImg,
-    imgCropClass: "crop-weaving",
-  },
-  {
-    id: "fabric-details",
-    discipline: "03 / TISSUE & CHANDERI TEXTURES",
-    title: "Fabric Details",
-    headline: "Lustrous Fluidity & Natural Fibers",
-    description: "Spun from unhurried cotton-silk filaments and pressed gold leaf, each yard delivers a weightless, tactile drape that responds to the wearer's movement with effortless grace.",
-    specs: ["Hand-Spun Filaments", "Beaten Gold Leaf", "Natural Vegetable Dyes"],
-    label: "Made in India",
-    image: collectionSignature,
-    imgCropClass: "crop-fabric",
-  },
-  {
-    id: "artisan-craftsmanship",
-    discipline: "04 / ATELIER DEVOTION",
-    title: "Artisan Craftsmanship",
-    headline: "Generational Karigar Hands",
-    description: "Honouring ancient craft guilds passed down across centuries. Every tension of thread and angle of tailoring reflects an intuitive, generational understanding of beauty.",
-    specs: ["Delhi & Lucknow Guilds", "Generational Masters", "Zero Mechanization"],
-    label: "Artisan Crafted",
-    image: wovenCraftImg,
-    imgCropClass: "crop-artisan",
-  },
-  {
-    id: "embroidery-patterns",
-    discipline: "05 / MOTIF ARCHIVE",
-    title: "Embroidery Patterns",
-    headline: "Sacred Temple Jaal & Paisley Motifs",
-    description: "Archival mughal floral jaals and sacred temple kalash motifs are drafted by hand on tracing parchment before being brought to three-dimensional life in shimmering gota patti.",
-    specs: ["Archival Motifs", "Gota Patti Jaal", "Geometric Symmetry"],
-    label: "Handwoven",
-    image: collectionFestiveEdit,
-    imgCropClass: "crop-patterns",
-  },
-];
-
-function CraftsmanshipStorySection() {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [scrollX, setScrollX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeftState, setScrollLeftState] = useState(0);
-
-  const scrollBy = (offset: number) => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: offset, behavior: "smooth" });
-    }
-  };
-
-  const handleScroll = () => {
-    if (scrollContainerRef.current) {
-      setScrollX(scrollContainerRef.current.scrollLeft);
-    }
-  };
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!scrollContainerRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
-    setScrollLeftState(scrollContainerRef.current.scrollLeft);
-  };
-
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollContainerRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    scrollContainerRef.current.scrollLeft = scrollLeftState - walk;
-  };
-
-  return (
-    <section className="craftsmanship-section" aria-label="Craftsmanship: Made by Hand. Made to Last.">
-      <div className="craftsmanship-header-wrap">
-        <div>
-          <div className="craftsmanship-eyebrow">
-            <span className="craftsmanship-diamond">✦</span>
-            <span>ATELIER ARCHIVES</span>
-            <span className="craftsmanship-line" />
-          </div>
-          <h2 className="craftsmanship-title">
-            Made by Hand.<br />
-            <em>Made to Last.</em>
-          </h2>
-        </div>
-
-        <div className="craftsmanship-controls">
-          <p className="craftsmanship-lead">
-            An intimate look into our atelier—where centuries-old Indian handloom and embroidery techniques become living works of art.
-          </p>
-          <div className="craftsmanship-nav-arrows">
-            <button
-              type="button"
-              onClick={() => scrollBy(-460)}
-              className="craftsmanship-arrow-btn"
-              aria-label="Scroll craftsmanship left"
-            >
-              <ChevronLeft size={18} strokeWidth={1.3} />
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollBy(460)}
-              className="craftsmanship-arrow-btn"
-              aria-label="Scroll craftsmanship right"
-            >
-              <ChevronRight size={18} strokeWidth={1.3} />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Horizontal Storytelling Strip */}
-      <div
-        className={`craftsmanship-reel-viewport ${isDragging ? "is-dragging" : ""}`}
-        ref={scrollContainerRef}
-        onScroll={handleScroll}
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-      >
-        <div className="craftsmanship-reel-track">
-          {craftDisciplines.map((item, index) => {
-            // Subtle scroll-based parallax translation calculation
-            const parallaxShift = Math.sin((scrollX / 300) + index) * 18;
-
-            return (
-              <div key={item.id} className="craftsmanship-story-card">
-                <div className="craftsmanship-media-frame">
-                  <div
-                    className="craftsmanship-parallax-inner"
-                    style={{
-                      transform: `translate3d(${parallaxShift}px, 0, 0) scale(1.08)`,
-                    }}
-                  >
-                    <img
-                      src={item.image}
-                      alt={`${item.title} — ${item.headline}`}
-                      loading="lazy"
-                      className={`craftsmanship-img ${item.imgCropClass}`}
-                    />
-                  </div>
-                  <div className="craftsmanship-img-scrim" />
-
-                  {/* Small Craftsmanship Label */}
-                  <span className="craftsmanship-pill-label">
-                    {item.label}
-                  </span>
-
-                  <span className="craftsmanship-corner-code">
-                    FIG. 0{index + 1}
-                  </span>
-                </div>
-
-                <div className="craftsmanship-card-content">
-                  <span className="craftsmanship-discipline-tag">{item.discipline}</span>
-                  <h3 className="craftsmanship-card-heading">{item.headline}</h3>
-                  <p className="craftsmanship-card-desc">{item.description}</p>
-
-                  <div className="craftsmanship-specs-list">
-                    {item.specs.map((spec) => (
-                      <span key={spec} className="craftsmanship-spec-chip">
-                        {spec}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const lookbookItems = [
-  {
-    id: "look-01",
-    index: "01",
-    title: "Velvet Crimson Lehenga",
-    category: "COUTURE DRAPES",
-    aspect: "tall",
-    image: maroon,
-    description: "Deep burgundy micro-velvet embroidered with intricate antique zardozi, hand-beaten gold wire, and finished with a gossamer organza veil.",
-    specs: "320 Artisan Hours • Hand Zardozi • Pure Silk Velvet",
-  },
-  {
-    id: "look-02",
-    index: "02",
-    title: "The Royal Bridal Heirloom",
-    category: "ROYAL BRIDAL",
-    aspect: "classic",
-    image: collectionBridal,
-    description: "Heirloom scarlet silk adorned with heritage architectural motifs, hand-beaded borders, and a scalloped gold tissue dupatta.",
-    specs: "Kashi Weave • Resham Embroidery • Heritage Red",
-  },
-  {
-    id: "look-03",
-    index: "03",
-    title: "Emerald Sculptural Silhouette",
-    category: "CONTEMPORARY",
-    aspect: "landscape",
-    image: moodContemporary,
-    description: "Sculptured modern anarkali silhouette in jewel-toned emerald silk, juxtaposing fluid drapes with geometric zari geometry.",
-    specs: "Fluid Chanderi Silk • Modern Silhouette • Minimalist Zari",
-  },
-  {
-    id: "look-04",
-    index: "04",
-    title: "Atelier Gilded Kurta Ensemble",
-    category: "ATELIER GOLD",
-    aspect: "tall",
-    image: collectionSignature,
-    description: "Finely woven gold thread motifs rendered on unbleached raw silk, finished with hand-hammered sequin piping and flared trousers.",
-    specs: "Raw Silk Weave • Gilded Motifs • Couture Tailoring",
-  },
-  {
-    id: "look-05",
-    index: "05",
-    title: "Saffron Brocade Festive Set",
-    category: "PALACE FESTIVE",
-    aspect: "square",
-    image: moodFestive,
-    description: "Luminous royal saffron silk with woven gold flora inspired by royal Mughal miniature murals and courtyards.",
-    specs: "Banarasi Katan Silk • Real Silver Zari • Festive Edit",
-  },
-  {
-    id: "look-06",
-    index: "06",
-    title: "Varanasi Heritage Handloom",
-    category: "HEIRLOOM WEAVE",
-    aspect: "landscape",
-    image: wovenCraftImg,
-    description: "Close-up macro study of master weavers at work, interlacing pure mulberry silk warp and weft with authentic gold zari thread.",
-    specs: "Master Guild • Traditional Pit Loom • Pure Mulberry Silk",
-  },
-  {
-    id: "look-07",
-    index: "07",
-    title: "Midnight Noir Evening Drape",
-    category: "TWILIGHT NOIR",
-    aspect: "tall",
-    image: moodEvening,
-    description: "Midnight noir sheer georgette with subtle gunmetal foil highlights and a dramatic architectural pallu for twilight galas.",
-    specs: "Fine Georgette • Gunmetal Foil • Evening Occasionwear",
-  },
-  {
-    id: "look-08",
-    index: "08",
-    title: "Chanderi Mint Gossamer",
-    category: "CHANDERI POISE",
-    aspect: "classic",
-    image: sage,
-    description: "Whisper-light sage chanderi with delicate floral booti drapes and sheer organza border accents for sunlit ceremonies.",
-    specs: "Chanderi Cotton Silk • Hand Booti • Daytime Soirée",
-  },
-];
-
-function FashionLookbookSection() {
-  const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
-  const [hoveredLookId, setHoveredLookId] = useState<string | null>(null);
-  const [cursorPos, setCursorPos] = useState<{ x: number; y: number } | null>(null);
-
-  // Keyboard navigation and body scroll lock for Lightbox
-  useEffect(() => {
-    if (activeLightboxIndex === null) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setActiveLightboxIndex(null);
-      } else if (e.key === "ArrowLeft") {
-        setActiveLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : lookbookItems.length - 1));
-      } else if (e.key === "ArrowRight") {
-        setActiveLightboxIndex((prev) => (prev !== null && prev < lookbookItems.length - 1 ? prev + 1 : 0));
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = originalOverflow;
-    };
-  }, [activeLightboxIndex]);
-
-  const activeItem = activeLightboxIndex !== null ? lookbookItems[activeLightboxIndex] : null;
-
-  return (
-    <section className="lookbook-section" aria-label="Fashion Lookbook">
-      {/* Header */}
-      <div className="lookbook-header">
-        <div className="lookbook-header-left">
-          <p className="eyebrow">EDITORIAL ARCHIVE / VOLUME IV</p>
-          <h2 className="lookbook-heading">THE LOOKBOOK</h2>
-        </div>
-        <p className="lookbook-subheading">
-          A visual chronicle of modern Indian silhouettes, poised between architectural grandeur and heirloom textile traditions.
-        </p>
-      </div>
-
-      {/* Masonry Editorial Gallery */}
-      <div className="lookbook-masonry-grid">
-        {lookbookItems.map((item, index) => (
-          <div
-            key={item.id}
-            className={`lookbook-masonry-item item-aspect-${item.aspect}`}
-            onClick={() => setActiveLightboxIndex(index)}
-            onMouseEnter={() => setHoveredLookId(item.id)}
-            onMouseLeave={() => {
-              setHoveredLookId(null);
-              setCursorPos(null);
-            }}
-            onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              setCursorPos({
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top,
-              });
-            }}
-            role="button"
-            tabIndex={0}
-            aria-label={`View look ${item.index}: ${item.title}`}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                setActiveLightboxIndex(index);
-              }
-            }}
-          >
-            <div className="lookbook-media-wrap">
-              <img
-                src={item.image}
-                alt={`${item.title} — ${item.category}`}
-                loading="lazy"
-                className="lookbook-image"
-              />
-              <div className="lookbook-image-scrim" />
-
-              {/* Minimal category label */}
-              <div className="lookbook-category-tag">
-                <span className="lookbook-index-dot" />
-                <span>{item.category}</span>
-              </div>
-
-              {/* Look number corner indicator */}
-              <span className="lookbook-corner-index">LOOK {item.index}</span>
-
-              {/* Floating cursor interaction pill */}
-              <div
-                className={`lookbook-cursor-indicator ${hoveredLookId === item.id ? "is-visible" : ""}`}
-                style={
-                  cursorPos && hoveredLookId === item.id
-                    ? { left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }
-                    : undefined
-                }
-              >
-                <Maximize2 size={13} strokeWidth={1.5} />
-                <span>EXPAND LOOK</span>
-              </div>
-            </div>
-
-            {/* Bottom editorial title caption */}
-            <div className="lookbook-item-meta">
-              <span className="lookbook-item-index">{item.index} /</span>
-              <h3 className="lookbook-item-title">{item.title}</h3>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Full-Screen Interactive Lightbox */}
-      {activeLightboxIndex !== null && activeItem && (
-        <div
-          className="lookbook-lightbox-backdrop"
-          onClick={() => setActiveLightboxIndex(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Lookbook Image Lightbox"
-        >
-          <div
-            className="lookbook-lightbox-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Lightbox Topbar */}
-            <div className="lookbook-lightbox-topbar">
-              <div className="lightbox-topbar-left">
-                <span className="lightbox-brand-label">AAVYA EDITORIAL</span>
-                <span className="lightbox-diamond">✦</span>
-                <span className="lightbox-archive-label">ARCHIVE 2026</span>
-              </div>
-
-              <div className="lightbox-counter">
-                LOOK [ {String(activeLightboxIndex + 1).padStart(2, "0")} / {String(lookbookItems.length).padStart(2, "0")} ]
-              </div>
-
-              <button
-                className="lightbox-close-btn"
-                onClick={() => setActiveLightboxIndex(null)}
-                aria-label="Close Lightbox"
-              >
-                <span>CLOSE</span>
-                <X size={18} strokeWidth={1.4} />
-              </button>
-            </div>
-
-            {/* Lightbox Stage */}
-            <div className="lookbook-lightbox-stage">
-              <button
-                className="lightbox-nav-btn prev-btn"
-                onClick={() =>
-                  setActiveLightboxIndex((prev) =>
-                    prev !== null && prev > 0 ? prev - 1 : lookbookItems.length - 1
-                  )
-                }
-                aria-label="Previous Look"
-              >
-                <ChevronLeft size={24} strokeWidth={1.2} />
-              </button>
-
-              <div className="lookbook-lightbox-frame">
-                <img
-                  key={activeItem.id}
-                  src={activeItem.image}
-                  alt={activeItem.title}
-                  className="lookbook-lightbox-img"
-                />
-              </div>
-
-              <button
-                className="lightbox-nav-btn next-btn"
-                onClick={() =>
-                  setActiveLightboxIndex((prev) =>
-                    prev !== null && prev < lookbookItems.length - 1 ? prev + 1 : 0
-                  )
-                }
-                aria-label="Next Look"
-              >
-                <ChevronRight size={24} strokeWidth={1.2} />
-              </button>
-            </div>
-
-            {/* Lightbox Info Drawer & Thumbnails */}
-            <div className="lookbook-lightbox-footer">
-              <div className="lightbox-footer-content">
-                <div className="lightbox-title-group">
-                  <span className="lightbox-category-chip">{activeItem.category}</span>
-                  <h3 className="lightbox-look-title">{activeItem.title}</h3>
-                  <p className="lightbox-look-desc">{activeItem.description}</p>
-                  <p className="lightbox-look-specs">{activeItem.specs}</p>
-                </div>
-
-                <div className="lightbox-actions">
-                  <Link
-                    to="/shop"
-                    className="lightbox-action-btn"
-                    onClick={() => setActiveLightboxIndex(null)}
-                  >
-                    <span>Inquire About Look</span>
-                    <ArrowRight size={14} />
-                  </Link>
-                </div>
-              </div>
-
-              {/* Thumbnails strip */}
-              <div className="lookbook-lightbox-thumbs">
-                {lookbookItems.map((item, idx) => (
-                  <button
-                    key={item.id}
-                    className={`lightbox-thumb-btn ${idx === activeLightboxIndex ? "is-active" : ""}`}
-                    onClick={() => setActiveLightboxIndex(idx)}
-                    aria-label={`Jump to look ${item.index}`}
-                  >
-                    <img src={item.image} alt={item.title} />
-                    <span className="lightbox-thumb-idx">{item.index}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
-  );
-}
-
 function CinematicBrandStorySection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollYOffset, setScrollYOffset] = useState(0);
@@ -1283,45 +1559,45 @@ function CinematicBrandStorySection() {
 const instagramPosts = [
   {
     id: "insta-1",
-    image: ivory,
+    image: bridalBengal,
     handle: "@aavyacouture",
-    tag: "#AavyaArchive",
-    caption: "Ivory silk whispered under morning courtyard light.",
+    tag: "#BengalHeritage",
+    caption: "Sacred Sholar Mukut & scarlet Katan Benarasi weave under chandelier glow.",
   },
   {
     id: "insta-2",
-    image: moodFestive,
+    image: indoWesternSareeJumpsuit,
     handle: "@aavyacouture",
-    tag: "#FestiveNocturne",
-    caption: "Royal saffron brocade woven with miniature floral motifs.",
+    tag: "#IndoWesternCouture",
+    caption: "Pre-draped floral saree jumpsuit with embroidered sweetheart bustier and belt.",
   },
   {
     id: "insta-3",
-    image: moodBridal,
+    image: bridalGujarat,
     handle: "@aavyacouture",
-    tag: "#TheBridalSuite",
-    caption: "Centuries of zardozi craft in one unforgettable silhouette.",
+    tag: "#PanetarTradition",
+    caption: "Traditional Panetar Bandhani seedha pallu draped in heritage havelis.",
   },
   {
     id: "insta-4",
-    image: moodContemporary,
+    image: indoWesternPalazzo,
     handle: "@aavyacouture",
-    tag: "#ModernHeritage",
-    caption: "Architectural flutes cut in pure emerald Chanderi silk.",
+    tag: "#IndoWesternPalazzo",
+    caption: "Ombre lime-olive sequin palazzo trousers with hand-beaded crop top and cape.",
   },
   {
     id: "insta-5",
-    image: moodTraditional,
+    image: bridalKerala,
     handle: "@aavyacouture",
-    tag: "#ArtisanHands",
-    caption: "From ancient Varanasi pit looms directly to the modern atelier.",
+    tag: "#SacredKasavu",
+    caption: "Ivory Kasavu pure gold zari amidst serene ancestral Nalukettu courtyards.",
   },
   {
     id: "insta-6",
-    image: moodEvening,
+    image: bridalAssam,
     handle: "@aavyacouture",
-    tag: "#TwilightGala",
-    caption: "Midnight noir sheer georgette with subtle gunmetal zari.",
+    tag: "#MugaSilkLegend",
+    caption: "Rare natural golden wild Muga silk woven with auspicious Kingkhap motifs.",
   },
 ];
 
@@ -1560,33 +1836,16 @@ function Index() {
         </div>
       </div>
     </section>
-    <BrandStatement />
     <div className="marquee-line"><span>AN EXPRESSION OF MODERN HERITAGE</span><span className="marquee-diamond">✦</span><span>CRAFTED TO BE REMEMBERED</span><span className="marquee-diamond">✦</span><span>AN EXPRESSION OF MODERN HERITAGE</span></div>
     <SixMoodsSection />
-    <section className="section-wrap edit-section" aria-label="Selected Pieces">
-      <div className="section-heading section-heading-inline">
-        <div>
-          <p className="eyebrow">02 / CURATED PIECES</p>
-          <h2>Selected <em>Pieces.</em></h2>
-        </div>
-        <Link to="/shop" className="text-link">
-          View all pieces <ArrowRight size={17} />
-        </Link>
-      </div>
-      <div className="product-grid home-product-grid">
-        {products.slice(0, 4).map((product) => (
-          <ProductTile key={product.slug} product={product} />
-        ))}
-      </div>
-    </section>
+    <PanIndianBridalSection />
+    <CurvedBridalGallerySection />
+    <TheBridalCollectionSection />
     <ForHerSection />
-    <CraftsmanshipStorySection />
-    <WovenStorySection />
     <CollectionShowcaseSection />
-    <FashionLookbookSection />
+    <WorthYourAttentionSection />
     <CinematicBrandStorySection />
     <InstagramGallerySection />
     <NewsletterSection />
-    <section className="closing-line"><p>THE FINER THINGS ARE FELT, NOT SAID.</p><h2>Something beautiful <em>begins here.</em></h2><Link to="/shop" className="text-link">Explore the collection <ArrowRight size={17} /></Link></section>
   </main>;
 }

@@ -69,10 +69,12 @@ export function Header() {
   }, []);
 
   const navCategories = [
-    { label: "Women", to: "/shop" as const, search: { category: "Women" } },
-    { label: "Collections", to: "/shop" as const, search: { category: "All" } },
-    { label: "New Arrivals", to: "/shop" as const, search: { category: "All" } },
-    { label: "About", to: "/story" as const },
+    { label: "Bridal Heritage", to: "/shop" as const, search: { category: "Bridal Heritage" } },
+    { label: "Indo Western Dresses", to: "/shop" as const, search: { category: "Indo Western Dresses" } },
+    { label: "Sarees", to: "/shop" as const, search: { category: "Sarees" } },
+    { label: "Lehengas", to: "/shop" as const, search: { category: "Lehengas" } },
+    { label: "All Collections", to: "/shop" as const, search: { category: "All" } },
+    { label: "Our Story", to: "/story" as const },
   ];
 
   const searchResults = searchQuery.trim()
@@ -475,25 +477,24 @@ export function ProductTile({ product }: { product: Product }) {
             className="product-media-link"
             aria-label={`View ${product.name}`}
           >
-            {/* Primary & Secondary Images with crossfade */}
+            {/* Single fixed image - does not change on click or hover */}
             <img
               src={product.image}
-              alt={`${product.name} primary angle`}
+              alt={product.name}
               loading="lazy"
               width={1024}
               height={1408}
-              className="product-img product-img-primary"
-            />
-            <img
-              src={product.secondaryImage || product.image}
-              alt={`${product.name} detailed drape`}
-              loading="lazy"
-              width={1024}
-              height={1408}
-              className="product-img product-img-secondary"
+              className="product-img product-img-fixed"
             />
             <div className="product-media-scrim" />
           </Link>
+
+          {/* State Tag for Bridal Outfits */}
+          {product.state && (
+            <span className="product-state-badge">
+              {product.state}
+            </span>
+          )}
 
           {/* Wishlist Heart Icon */}
           <button
@@ -560,30 +561,14 @@ export function ProductTile({ product }: { product: Product }) {
             </button>
 
             <div className="quickview-grid">
-              {/* Left: Dual image showcase */}
+              {/* Single fixed image showcase */}
               <div className="quickview-gallery">
                 <div className="quickview-main-image-wrap">
                   <img
-                    src={activeModalImg === "primary" ? product.image : product.secondaryImage || product.image}
+                    src={product.image}
                     alt={product.name}
                     className="quickview-main-img"
                   />
-                </div>
-                <div className="quickview-thumbs">
-                  <button
-                    type="button"
-                    className={`quickview-thumb-btn ${activeModalImg === "primary" ? "active" : ""}`}
-                    onClick={() => setActiveModalImg("primary")}
-                  >
-                    <img src={product.image} alt="Primary look" />
-                  </button>
-                  <button
-                    type="button"
-                    className={`quickview-thumb-btn ${activeModalImg === "secondary" ? "active" : ""}`}
-                    onClick={() => setActiveModalImg("secondary")}
-                  >
-                    <img src={product.secondaryImage || product.image} alt="Detail look" />
-                  </button>
                 </div>
               </div>
 
