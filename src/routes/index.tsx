@@ -1176,7 +1176,7 @@ const worthCards = [
     detail: "Ivory & Sage Silk Ensemble",
     price: "From ₹42,000",
     image: attentionFeatured,
-    position: "center 48%",
+    position: "center 18%",
     slug: "the-modern-sisterhood-trio",
   },
   {
@@ -1187,7 +1187,7 @@ const worthCards = [
     detail: "Blush Georgette & Palazzo",
     price: "₹38,500",
     image: attentionCard1,
-    position: "center 50%",
+    position: "center 18%",
     slug: "gulabi-resham-georgette-suit",
   },
   {
@@ -1198,7 +1198,7 @@ const worthCards = [
     detail: "Emerald Tilla Silk & Jacket",
     price: "₹46,000",
     image: attentionCard2,
-    position: "center 52%",
+    position: "center 18%",
     slug: "zamarrud-emerald-sharara-suit",
   },
   {
@@ -1209,7 +1209,7 @@ const worthCards = [
     detail: "Honey-Gold Raw Silk",
     price: "₹52,000",
     image: attentionCard3,
-    position: "center 38%",
+    position: "center 18%",
     slug: "zafran-gold-silk-trouser-set",
   },
   {
@@ -1220,7 +1220,7 @@ const worthCards = [
     detail: "Midnight Navy Cape Sharara",
     price: "₹44,500",
     image: attentionCard4,
-    position: "center 60%",
+    position: "center 18%",
     slug: "surmai-sapphire-cape-suit",
   },
   {
@@ -1231,7 +1231,7 @@ const worthCards = [
     detail: "Plum Resham & Sheer Cape",
     price: "₹49,000",
     image: attentionCard5,
-    position: "center 52%",
+    position: "center 18%",
     slug: "jamuni-cowl-kalidar-anarkali",
   },
 ];
