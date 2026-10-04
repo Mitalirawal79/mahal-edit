@@ -45,6 +45,7 @@ import attentionCard5 from "@/assets/attention-card-5.jpg";
 import attentionCard6 from "@/assets/attention-card-6.jpg";
 
 import { MagneticElement } from "@/components/storefront";
+import { CinematicFrameSequence } from "@/components/cinematic-frame-sequence";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -1785,6 +1786,7 @@ function Index() {
   useLuxuryScrollReveal();
 
   return <main className="luxury-experience-page">
+    <CinematicFrameSequence />
     <section className="hero-luxury-wrap" aria-label="Hero Section">
       <div className="hero-media-container">
         <img
