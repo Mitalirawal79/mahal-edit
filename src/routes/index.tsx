@@ -1787,57 +1787,6 @@ function Index() {
 
   return <main className="luxury-experience-page">
     <CinematicFrameSequence />
-    <section className="hero-luxury-wrap" aria-label="Hero Section">
-      <div className="hero-media-container">
-        <img
-          className="hero-cinematic-img"
-          src={heroCinematic}
-          alt="Indian model wearing royal wine and gold embroidered ethnic couture in a heritage palace courtyard"
-          width={1920}
-          height={1080}
-          fetchPriority="high"
-        />
-        <div className="hero-scrim-gradient" />
-      </div>
-
-      <div className="hero-content-wrap">
-        <div className="hero-text-block">
-          <p className="hero-collection-label">
-            <span>AUTUMN WINTER 2026</span>
-            <span className="hero-diamond">✦</span>
-            <span>THE COUTURE EDIT</span>
-          </p>
-
-          <h1 className="hero-title">
-            The Art of<br />
-            <em>Indian Elegance</em>
-          </h1>
-
-          <p className="hero-subtitle">
-            Heirloom zardozi, handwoven silk, and silhouettes sculpted for the moments that transcend time.
-          </p>
-
-          <div className="hero-cta-group">
-            <MagneticElement strength={0.25}>
-              <Link to="/shop" className="hero-cta-btn">
-                <span>Explore Collection</span>
-                <span className="hero-cta-icon">
-                  <ArrowRight size={17} strokeWidth={1.3} />
-                </span>
-              </Link>
-            </MagneticElement>
-          </div>
-        </div>
-
-        <div className="hero-meta-bottom">
-          <div className="hero-scroll-prompt">
-            <span className="hero-scroll-line" />
-            <span className="hero-scroll-text">SCROLL</span>
-          </div>
-          <div className="hero-edition-tag">01 / 04 — COUTURE EDITION</div>
-        </div>
-      </div>
-    </section>
     <div className="marquee-line"><span>AN EXPRESSION OF MODERN HERITAGE</span><span className="marquee-diamond">✦</span><span>CRAFTED TO BE REMEMBERED</span><span className="marquee-diamond">✦</span><span>AN EXPRESSION OF MODERN HERITAGE</span></div>
     <SixMoodsSection />
     <PanIndianBridalSection />

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { ArrowDown, Sparkles } from "lucide-react";
 
-const TOTAL_FRAMES = 120;
+const TOTAL_FRAMES = 240;
 const FRAME_PREFIX = "/frames/ezgif-frame-";
 const FRAME_PAD = 3;
 const FRAME_EXT = ".jpg";
@@ -17,60 +17,66 @@ export function CinematicFrameSequence() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Cached HTMLImageElements
-  const imagesRef = useRef<(HTMLImageElement | null)[]>(new Array(TOTAL_FRAMES).fill(null));
-  const loadedFlagsRef = useRef<boolean[]>(new Array(TOTAL_FRAMES).fill(false));
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
 
   // Animation and scrubbing state
   const targetFrameRef = useRef<number>(0);
   const currentFrameRef = useRef<number>(0);
   const lastRenderedFrameRef = useRef<number>(-1);
+  const hasDrawnInitialRef = useRef<boolean>(false);
   const rafIdRef = useRef<number | null>(null);
 
   // UI state
-  const [loadedCount, setLoadedCount] = useState<number>(0);
-  const [isInitialReady, setIsInitialReady] = useState<boolean>(false);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
 
   // Draw a frame onto canvas with cover aspect-ratio
-  const drawFrame = useCallback((frameIndex: number) => {
+  const drawFrame = useCallback((frameIndex: number): boolean => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d", { alpha: false });
-    if (!ctx) return;
+    if (!canvas) return false;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return false;
 
     // Find requested or nearest available loaded frame
     let frameToRender: HTMLImageElement | null = null;
     let actualIndex = frameIndex;
 
-    if (loadedFlagsRef.current[frameIndex] && imagesRef.current[frameIndex]) {
-      frameToRender = imagesRef.current[frameIndex];
+    const requested = imagesRef.current[frameIndex];
+    if (requested && requested.complete && requested.naturalWidth > 0) {
+      frameToRender = requested;
     } else {
       // Search closest loaded frame (prefer previous, then next)
       for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
         const prev = frameIndex - offset;
-        if (prev >= 0 && loadedFlagsRef.current[prev] && imagesRef.current[prev]) {
-          frameToRender = imagesRef.current[prev];
-          actualIndex = prev;
-          break;
+        if (prev >= 0) {
+          const pImg = imagesRef.current[prev];
+          if (pImg && pImg.complete && pImg.naturalWidth > 0) {
+            frameToRender = pImg;
+            actualIndex = prev;
+            break;
+          }
         }
         const next = frameIndex + offset;
-        if (next < TOTAL_FRAMES && loadedFlagsRef.current[next] && imagesRef.current[next]) {
-          frameToRender = imagesRef.current[next];
-          actualIndex = next;
-          break;
+        if (next < TOTAL_FRAMES) {
+          const nImg = imagesRef.current[next];
+          if (nImg && nImg.complete && nImg.naturalWidth > 0) {
+            frameToRender = nImg;
+            actualIndex = next;
+            break;
+          }
         }
       }
     }
 
     if (!frameToRender || !frameToRender.complete || frameToRender.naturalWidth === 0) {
-      return;
+      return false;
     }
 
-    const { width: canvasW, height: canvasH } = canvas;
-    if (canvasW === 0 || canvasH === 0) return;
+    const canvasW = canvas.width;
+    const canvasH = canvas.height;
+    if (canvasW === 0 || canvasH === 0) return false;
 
-    const imgW = frameToRender.naturalWidth;
-    const imgH = frameToRender.naturalHeight;
+    const imgW = frameToRender.naturalWidth || 2560;
+    const imgH = frameToRender.naturalHeight || 1440;
     const imgRatio = imgW / imgH;
     const canvasRatio = canvasW / canvasH;
 
@@ -92,10 +98,10 @@ export function CinematicFrameSequence() {
       offsetY = 0;
     }
 
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
     ctx.drawImage(frameToRender, offsetX, offsetY, drawW, drawH);
     lastRenderedFrameRef.current = actualIndex;
+    hasDrawnInitialRef.current = true;
+    return true;
   }, []);
 
   // Resize canvas to match display size multiplied by Device Pixel Ratio
@@ -104,67 +110,60 @@ export function CinematicFrameSequence() {
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
+    const width = rect.width || window.innerWidth || 1920;
+    const height = rect.height || window.innerHeight || 1080;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const newWidth = Math.round(rect.width * dpr);
-    const newHeight = Math.round(rect.height * dpr);
+    const newWidth = Math.round(width * dpr);
+    const newHeight = Math.round(height * dpr);
 
     if (canvas.width !== newWidth || canvas.height !== newHeight) {
       canvas.width = newWidth;
       canvas.height = newHeight;
-      const target = Math.round(currentFrameRef.current);
-      drawFrame(target);
+      // Canvas resize clears the canvas bitmap, immediately redraw current frame
+      drawFrame(Math.round(currentFrameRef.current));
     }
   }, [drawFrame]);
 
-  // Preload frames efficiently
+  // Preload frames efficiently without strict mode bugs
   useEffect(() => {
-    let isCancelled = false;
-    let loaded = 0;
-
-    // Load first frame with priority
-    const firstImg = new Image();
-    firstImg.src = getFrameUrl(0);
-    imagesRef.current[0] = firstImg;
-
-    firstImg.onload = () => {
-      if (isCancelled) return;
-      loadedFlagsRef.current[0] = true;
-      loaded += 1;
-      setLoadedCount(loaded);
-      setIsInitialReady(true);
-      updateCanvasDimensions();
-      drawFrame(0);
-    };
-
-    // Load remaining frames
-    for (let i = 1; i < TOTAL_FRAMES; i++) {
-      const img = new Image();
-      img.src = getFrameUrl(i);
-      imagesRef.current[i] = img;
-
-      img.onload = () => {
-        if (isCancelled) return;
-        loadedFlagsRef.current[i] = true;
-        loaded += 1;
-        setLoadedCount(loaded);
-
-        // If target frame happens to be this frame or near it, redraw
-        const currentTarget = Math.round(currentFrameRef.current);
-        if (Math.abs(currentTarget - i) <= 1) {
-          drawFrame(currentTarget);
-        }
-      };
-
-      img.onerror = () => {
-        if (isCancelled) return;
-        console.warn(`[CinematicFrameSequence] Failed to load frame ${i}`);
-      };
+    if (imagesRef.current.length !== TOTAL_FRAMES) {
+      imagesRef.current = new Array(TOTAL_FRAMES).fill(null);
     }
 
-    return () => {
-      isCancelled = true;
+    const ensureLoaded = (index: number) => {
+      if (imagesRef.current[index]) return;
+      const img = new Image();
+      img.src = getFrameUrl(index);
+      img.onload = () => {
+        const curTarget = Math.round(currentFrameRef.current);
+        if (!hasDrawnInitialRef.current || Math.abs(curTarget - index) <= 1) {
+          drawFrame(curTarget);
+        }
+      };
+      imagesRef.current[index] = img;
     };
-  }, [drawFrame, updateCanvasDimensions]);
+
+    // Load first 10 frames immediately for quick startup
+    for (let i = 0; i < Math.min(10, TOTAL_FRAMES); i++) {
+      ensureLoaded(i);
+    }
+
+    // If frame 0 is already cached in memory, draw it right away
+    if (imagesRef.current[0]?.complete && imagesRef.current[0]?.naturalWidth > 0) {
+      drawFrame(0);
+    }
+
+    // Preload remaining frames
+    const timer = setTimeout(() => {
+      for (let i = 0; i < TOTAL_FRAMES; i++) {
+        ensureLoaded(i);
+      }
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [drawFrame]);
 
   // Handle Resize
   useEffect(() => {
@@ -191,23 +190,18 @@ export function CinematicFrameSequence() {
       // Smooth interpolation (spring-like responsiveness without jitter)
       if (Math.abs(diff) > 0.001) {
         currentFrameRef.current = current + diff * 0.22;
-        const roundedIndex = Math.min(
-          Math.max(Math.round(currentFrameRef.current), 0),
-          TOTAL_FRAMES - 1
-        );
-
-        if (roundedIndex !== lastRenderedFrameRef.current) {
-          drawFrame(roundedIndex);
-        }
-      } else if (currentFrameRef.current !== target) {
+      } else {
         currentFrameRef.current = target;
-        const roundedIndex = Math.min(
-          Math.max(Math.round(target), 0),
-          TOTAL_FRAMES - 1
-        );
-        if (roundedIndex !== lastRenderedFrameRef.current) {
-          drawFrame(roundedIndex);
-        }
+      }
+
+      const roundedIndex = Math.min(
+        Math.max(Math.round(currentFrameRef.current), 0),
+        TOTAL_FRAMES - 1
+      );
+
+      // Keep attempting to draw until initial frame rendered, or whenever frame changes
+      if (!hasDrawnInitialRef.current || roundedIndex !== lastRenderedFrameRef.current) {
+        drawFrame(roundedIndex);
       }
 
       rafIdRef.current = requestAnimationFrame(renderLoop);
@@ -240,7 +234,7 @@ export function CinematicFrameSequence() {
 
       setScrollProgress(progress);
 
-      // Map progress to exact frame index (0 to 119)
+      // Map progress to exact frame index (0 to TOTAL_FRAMES - 1)
       const mappedFrame = progress * (TOTAL_FRAMES - 1);
       targetFrameRef.current = mappedFrame;
     };
@@ -282,9 +276,8 @@ export function CinematicFrameSequence() {
           aria-label="Interactive frame by frame Indian couture atelier animation"
         />
 
-        {/* Ambient Film Vignette & Scrims */}
+        {/* Ambient Film Scrim */}
         <div className="cinematic-vignette-overlay" />
-        <div className="cinematic-grain-overlay" />
 
         {/* Top HUD: Editorial Header */}
         <div className="cinematic-hud-top">
@@ -374,23 +367,6 @@ export function CinematicFrameSequence() {
             <ArrowDown size={14} className="cinematic-skip-icon" />
           </button>
         </div>
-
-        {/* Preload Status Bar (shows subtly until ready) */}
-        {!isInitialReady && (
-          <div className="cinematic-loader-overlay">
-            <div className="cinematic-loader-box">
-              <div className="cinematic-loader-spinner" />
-              <p className="cinematic-loader-title">AAVYA COUTURE</p>
-              <p className="cinematic-loader-subtitle">Loading Cinematic Experience...</p>
-              <div className="cinematic-loader-track">
-                <div
-                  className="cinematic-loader-fill"
-                  style={{ width: `${Math.round((loadedCount / TOTAL_FRAMES) * 100)}%` }}
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
